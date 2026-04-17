@@ -21,12 +21,17 @@ on:
 jobs:
   # Job, který jsme nazvali deploy
   deploy:
+    permissions:
+      contents: read    # Nutné pro stažení kódu (krok actions/checkout)
+      packages: write   # Umožní čtení i zápis (push) Docker images v rámci tohoto repa
     # Použijeme výchozí runner, který nám managuje GitHub
     runs-on: ubuntu-latest
     # Nastavíme proměnné prostředí s názvem image
     env:
       # Image včetně domény s registry sestavíme pomocí proměnné připravené GitHubem
-      IMAGE: ghcr.io/${{ github.repository }}
+      IMAGE: 
+ghcr.io/$
+{{ github.repository }}
       # !!! Tento secret je potřeba nastavit ručně v GitHub secrets pro tento konkrétní project
       PULL_ENDPOINT: ${{ secrets.PULL_ENDPOINT }}
     # Jednotlivé stepy našeho deploy jobu
@@ -53,13 +58,19 @@ jobs:
       # Debug output, vytiskneme proměnné prostředí, které se hodí pro ladění tohoto workflow
       - name: Debug info
         run: |
-          echo "Username: ${{ github.actor }}"
+          echo "Username: ${{ 
+github.actor
+ }}"
           echo "Image: $IMAGE"
           echo "Image tag: ${{ env.TAG_NAME }}"
 
       # Login do GitHub docker image registry, používá přístup vygenerovaný GitHubem pro workflows
       - name: Log in to registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login 
+ghcr.io
+ -u ${{ 
+github.actor
+ }} --password-stdin
       
       # Build image
       - name: Build
@@ -91,4 +102,4 @@ jobs:
             echo "--- STDERR ---"
             echo "$RESPONSE" | jq -r '.stderr'
             exit 1
-          fi
+          fi 
